@@ -6,8 +6,18 @@
 //
 
 import UIKit
+import Combine
 
 final class HomeViewController: UIViewController {
+    
+    // MARK: - Variables
+    
+    private var searchText = PassthroughSubject<String, Never>()
+    private var cancellable: AnyCancellable?
+    
+//    private var searchArray: [Search] = []
+    private var isSearchTextEmpty: Bool = true
+    
     private var viewModel: HomeViewModelProtocol!
     
     init(viewModel: HomeViewModelProtocol) {
@@ -19,7 +29,159 @@ final class HomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Views
+    
+    private lazy var searchView: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.searchBarStyle = .minimal
+        searchBar.placeholder = String(localized: "Dashboard.SearchText")
+        searchBar.delegate = self
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        return searchBar
+    }()
+    
+    private lazy var movieCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.itemSize = CGSize(width: 90, height: 180)
+        flowLayout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.backgroundColor = .clear
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(UINib(nibName: Constants.GitHubUserCell, bundle: nil), forCellWithReuseIdentifier: Constants.GitHubUserCell)
+        return collectionView
+    }()
+    
+    private lazy var collectionViewErrorMessageLabel: UILabel = {
+        let label = UILabel()
+        label.text = String(localized: "Dashboard.ResultNotFound")
+        label.textColor = .lightGray
+        label.isHidden = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.color = .orange
+        indicator.frame(forAlignmentRect: CGRect(x: view.frame.width / 2,
+                                                 y: view.frame.height / 2,
+                                                 width: 50,
+                                                 height: 50))
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
+    
+    // MARK: - Lifecycle Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSceneUI()
+//        viewModel.delegate = self
+        addViews()
+        setupConstraints()
+        setupSearchWithDebounce()
     }
+    
+    // MARK: - UI
+    
+    private func setupSceneUI() {
+        view.backgroundColor = .white
+        navigationItem.setHidesBackButton(true, animated: true)
+    }
+    
+    func addViews() {
+        view.addSubview(searchView)
+        view.addSubview(movieCollectionView)
+        view.addSubview(collectionViewErrorMessageLabel)
+        view.addSubview(activityIndicator)
+    }
+    
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            searchView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            searchView.heightAnchor.constraint(equalToConstant: 50),
+            
+            movieCollectionView.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 16),
+            movieCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            movieCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            movieCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -32),
+            
+            collectionViewErrorMessageLabel.centerXAnchor.constraint(equalTo: movieCollectionView.centerXAnchor),
+            collectionViewErrorMessageLabel.centerYAnchor.constraint(equalTo: movieCollectionView.centerYAnchor, constant: -30),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: movieCollectionView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: movieCollectionView.centerYAnchor)
+        ])
+    }
+    
+    // MARK: - Other Methods
+    
+    private func setupSearchWithDebounce() {
+        cancellable = searchText
+            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .sink(receiveValue: { [weak self] query in
+                self?.activityIndicator.startAnimating()
+//                self?.viewModel.getSearchedMovies(searchText: query,
+//                                                  pageNumber: self?.currentPage ?? 0)
+            })
+    }
+}
+
+// MARK: - Extensions
+
+extension HomeViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+//            self.searchArray = []
+//            self.movieCollectionView.reloadData()
+            self.collectionViewErrorMessageLabel.isHidden = true
+            self.isSearchTextEmpty = true
+        } else {
+            self.searchText.send(searchText)
+        }
+    }
+    
+}
+
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.GitHubUserCell, for: indexPath) as! GitHubUserCollectionViewCell
+        cell.configure(
+            name: "Kadir Emre",
+            avatarURL: nil,
+            isFavourite: true
+        )
+//        let movie = searchArray[indexPath.row]
+//        
+//        if let posterURL = URL(string: movie.poster) {
+//            cell.moviePosterImageView.sd_setImage(with: posterURL,
+//                                                  placeholderImage: UIImage(systemName: "film"))}
+//        cell.movieNameLabel.text = movie.title
+//        cell.movieYearLabel.text = movie.year
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.viewModel.navigateToDetail()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if indexPath.row == (self.searchArray.count) - 1 {
+//            self.viewModel.getSearchedMovies(searchText: searchView.searchTextField.text,
+//                                             pageNumber: self.currentPage + 1)
+//        }
+    }
+    
 }

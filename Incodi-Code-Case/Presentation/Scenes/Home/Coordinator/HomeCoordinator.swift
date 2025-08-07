@@ -25,4 +25,12 @@ final class HomeCoordinator: Coordinator {
         let viewController = HomeViewController(viewModel: viewModel)
         navigationController.pushViewController(viewController, animated: true)
     }
+    
+    func navigateToDetail() {
+        let detailCoordinator = DetailCoordinator(
+            parentCoordinator: self,
+            navigationController: navigationController
+        )
+        detailCoordinator.start()
+    }
 }

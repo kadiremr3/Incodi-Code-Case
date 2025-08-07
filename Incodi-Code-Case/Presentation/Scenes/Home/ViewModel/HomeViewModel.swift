@@ -14,4 +14,8 @@ final class HomeViewModel: HomeViewModelProtocol {
     init(coordinator: HomeCoordinator!) {
         self.homeCoordinator = coordinator
     }
+    
+    func navigateToDetail() {
+        homeCoordinator.navigateToDetail()
+    }
 }

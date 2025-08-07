@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		EACB89862E44B25500981756 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EACB89852E44B25500981756 /* SDWebImage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		EACB88742E438C9C00981756 /* Incodi-Code-Case.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Incodi-Code-Case.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EACB89862E44B25500981756 /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = "Incodi-Code-Case";
 			packageProductDependencies = (
+				EACB89852E44B25500981756 /* SDWebImage */,
 			);
 			productName = "Incodi-Code-Case";
 			productReference = EACB88742E438C9C00981756 /* Incodi-Code-Case.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = EACB886B2E438C9C00981756;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EACB89842E44B25500981756 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EACB88752E438C9C00981756 /* Products */;
 			projectDirPath = "";
@@ -341,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EACB89842E44B25500981756 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.21.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EACB89852E44B25500981756 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EACB89842E44B25500981756 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EACB886C2E438C9C00981756 /* Project object */;
 }

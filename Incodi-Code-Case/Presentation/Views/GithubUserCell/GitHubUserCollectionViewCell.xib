@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24093.8" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24053.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GitHubUserCollectionViewCell"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell contentMode="scaleToFill" reuseIdentifier="GitHubUserCollectionViewCell" id="0Tx-eW-nZ3" userLabel="GitHubUserCollectionViewCell" customClass="GitHubUserCollectionViewCell" customModule="Incodi_Code_Case" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="210"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" contentMode="scaleToFill">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="210"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="myN-cA-Xdr">
+                        <rect key="frame" x="8" y="8" width="359" height="194"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="c2T-aX-GJY">
+                                <rect key="frame" x="149.66666666666666" y="0.0" width="60" height="59.333333333333336"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Kadir Emre" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zNw-1u-mRj">
+                                <rect key="frame" x="8" y="67.333333333333329" width="343" height="59.333333333333329"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kU9-Jy-GK5">
+                                <rect key="frame" x="164" y="134.66666666666666" width="31" height="59.333333333333343"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <state key="normal" title="☆"/>
+                                <state key="selected" title="★"/>
+                                <connections>
+                                    <action selector="favouriteButtonTapped:" destination="-1" eventType="touchUpInside" id="CwH-mM-kvk"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="zNw-1u-mRj" firstAttribute="leading" secondItem="myN-cA-Xdr" secondAttribute="leading" constant="8" id="9Yc-lU-wzM"/>
+                            <constraint firstAttribute="trailing" secondItem="zNw-1u-mRj" secondAttribute="trailing" constant="8" id="Re2-gu-xG1"/>
+                            <constraint firstItem="c2T-aX-GJY" firstAttribute="centerX" secondItem="myN-cA-Xdr" secondAttribute="centerX" id="kbU-KX-dir"/>
+                            <constraint firstItem="kU9-Jy-GK5" firstAttribute="centerX" secondItem="myN-cA-Xdr" secondAttribute="centerX" id="pWl-hd-d12"/>
+                        </constraints>
+                    </stackView>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="myN-cA-Xdr" secondAttribute="bottom" constant="8" id="7UF-cj-Jqe"/>
+                <constraint firstItem="myN-cA-Xdr" firstAttribute="leading" secondItem="0Tx-eW-nZ3" secondAttribute="leading" constant="8" id="NwC-6R-TCo"/>
+                <constraint firstItem="myN-cA-Xdr" firstAttribute="top" secondItem="0Tx-eW-nZ3" secondAttribute="top" constant="8" id="Tud-8W-MC8"/>
+                <constraint firstAttribute="trailing" secondItem="myN-cA-Xdr" secondAttribute="trailing" constant="8" id="bsW-9N-vhx"/>
+            </constraints>
+            <size key="customSize" width="375" height="210"/>
+            <connections>
+                <outlet property="avatarImageView" destination="c2T-aX-GJY" id="gRg-gc-B1B"/>
+                <outlet property="favouriteButton" destination="kU9-Jy-GK5" id="UM0-U9-x7m"/>
+                <outlet property="userNameLabel" destination="zNw-1u-mRj" id="oaX-mC-TqY"/>
+            </connections>
+            <point key="canvasLocation" x="138.1679389312977" y="188.73239436619718"/>
+        </collectionViewCell>
+    </objects>
+</document>
