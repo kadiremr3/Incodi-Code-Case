@@ -15,7 +15,7 @@ final class HomeViewController: UIViewController {
     private var searchText = PassthroughSubject<String, Never>()
     private var cancellable: AnyCancellable?
     
-//    private var searchArray: [Search] = []
+    private var searchArray: [GitHubUser] = []
     private var isSearchTextEmpty: Bool = true
     
     private var viewModel: HomeViewModelProtocol!
@@ -40,7 +40,7 @@ final class HomeViewController: UIViewController {
         return searchBar
     }()
     
-    private lazy var movieCollectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize = CGSize(width: 90, height: 180)
         flowLayout.scrollDirection = .vertical
@@ -80,7 +80,7 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSceneUI()
-//        viewModel.delegate = self
+        viewModel.delegate = self
         addViews()
         setupConstraints()
         setupSearchWithDebounce()
@@ -95,7 +95,7 @@ final class HomeViewController: UIViewController {
     
     func addViews() {
         view.addSubview(searchView)
-        view.addSubview(movieCollectionView)
+        view.addSubview(collectionView)
         view.addSubview(collectionViewErrorMessageLabel)
         view.addSubview(activityIndicator)
     }
@@ -107,16 +107,16 @@ final class HomeViewController: UIViewController {
             searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             searchView.heightAnchor.constraint(equalToConstant: 50),
             
-            movieCollectionView.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 16),
-            movieCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            movieCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            movieCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -32),
+            collectionView.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 16),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -32),
             
-            collectionViewErrorMessageLabel.centerXAnchor.constraint(equalTo: movieCollectionView.centerXAnchor),
-            collectionViewErrorMessageLabel.centerYAnchor.constraint(equalTo: movieCollectionView.centerYAnchor, constant: -30),
+            collectionViewErrorMessageLabel.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
+            collectionViewErrorMessageLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -30),
             
-            activityIndicator.centerXAnchor.constraint(equalTo: movieCollectionView.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: movieCollectionView.centerYAnchor)
+            activityIndicator.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor)
         ])
     }
     
@@ -128,20 +128,43 @@ final class HomeViewController: UIViewController {
             .removeDuplicates()
             .sink(receiveValue: { [weak self] query in
                 self?.activityIndicator.startAnimating()
-//                self?.viewModel.getSearchedMovies(searchText: query,
-//                                                  pageNumber: self?.currentPage ?? 0)
+                do {
+                    try self?.viewModel.fetchGitHubUsers(with: query)
+                } catch {
+                    print("Fetch error: \(error)")
+                }
             })
     }
 }
 
 // MARK: - Extensions
 
+extension HomeViewController: HomeViewModelDelegate {
+    func didFetchUsers(_ users: [GitHubUser]) {
+        self.collectionView.reloadData()
+        self.collectionViewErrorMessageLabel.isHidden = true
+        self.activityIndicator.stopAnimating()
+        self.searchArray.append(contentsOf: users)
+    }
+    
+    func didFailWithError(_ error: any Error) {
+        self.collectionView.reloadData()
+        self.activityIndicator.stopAnimating()
+        if self.searchArray.count == 0 || !self.isSearchTextEmpty {
+            self.collectionViewErrorMessageLabel.isHidden = false
+        }
+    }
+}
+
 extension HomeViewController: UISearchBarDelegate {
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(
+        _ searchBar: UISearchBar,
+        textDidChange searchText: String
+    ) {
         if searchText == "" {
-//            self.searchArray = []
-//            self.movieCollectionView.reloadData()
+            self.searchArray = []
+            self.collectionView.reloadData()
             self.collectionViewErrorMessageLabel.isHidden = true
             self.isSearchTextEmpty = true
         } else {
@@ -152,36 +175,31 @@ extension HomeViewController: UISearchBarDelegate {
 }
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        return self.searchArray.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.GitHubUserCell, for: indexPath) as! GitHubUserCollectionViewCell
+        let user = searchArray[indexPath.row]
         cell.configure(
-            name: "Kadir Emre",
-            avatarURL: nil,
+            name: user.login,
+            avatarURL: URL(string: user.avatar_url),
             isFavourite: true
         )
-//        let movie = searchArray[indexPath.row]
-//        
-//        if let posterURL = URL(string: movie.poster) {
-//            cell.moviePosterImageView.sd_setImage(with: posterURL,
-//                                                  placeholderImage: UIImage(systemName: "film"))}
-//        cell.movieNameLabel.text = movie.title
-//        cell.movieYearLabel.text = movie.year
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
         self.viewModel.navigateToDetail()
     }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        if indexPath.row == (self.searchArray.count) - 1 {
-//            self.viewModel.getSearchedMovies(searchText: searchView.searchTextField.text,
-//                                             pageNumber: self.currentPage + 1)
-//        }
-    }
-    
 }

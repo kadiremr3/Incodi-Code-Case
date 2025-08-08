@@ -30,6 +30,7 @@ final class GitHubUserCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         avatarImageView.sd_imageTransition = .fade
+        avatarImageView.contentMode = .scaleAspectFit
         favouriteButton.setTitle(nil, for: .normal)
         favouriteButton.contentHorizontalAlignment = .center
         favouriteButton.titleLabel?.font = .systemFont(ofSize: 18)
