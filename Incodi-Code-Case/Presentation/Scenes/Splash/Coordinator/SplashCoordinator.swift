@@ -32,6 +32,7 @@ final class SplashCoordinator: Coordinator {
             parentCoordinator: self,
             navigationController: navigationController
         )
+        navigationController.navigationBar.isHidden = false
         homeCoordinator.start()
     }
     

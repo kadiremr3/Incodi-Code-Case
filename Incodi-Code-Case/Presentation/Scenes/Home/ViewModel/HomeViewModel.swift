@@ -32,7 +32,7 @@ final class HomeViewModel: HomeViewModelProtocol {
         }
     }
     
-    func navigateToDetail() {
-        homeCoordinator.navigateToDetail()
+    func navigateToDetail(with user: GitHubUser) {
+        homeCoordinator.navigateToDetail(with: user)
     }
 }

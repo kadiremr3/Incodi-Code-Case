@@ -9,7 +9,7 @@ import Foundation
 
 protocol HomeViewModelProtocol: AnyObject {
     var delegate: HomeViewModelDelegate? { get set }
-    func navigateToDetail()
+    func navigateToDetail(with user: GitHubUser)
     @MainActor
     func fetchGitHubUsers(with query: String) throws
 }

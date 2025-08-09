@@ -29,16 +29,20 @@ final class GitHubUserCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        avatarImageView.sd_imageTransition = .fade
+        self.layer.cornerRadius = 30
+        backgroundColor = ColorSet.incodiBlack.withAlphaComponent(0.3)
         avatarImageView.contentMode = .scaleAspectFit
-        favouriteButton.setTitle(nil, for: .normal)
-        favouriteButton.contentHorizontalAlignment = .center
-        favouriteButton.titleLabel?.font = .systemFont(ofSize: 18)
+        avatarImageView.layer.cornerRadius = 15
         userNameLabel.numberOfLines = 0
+        userNameLabel.textColor = .white
         userNameLabel.adjustsFontSizeToFitWidth = true
         userNameLabel.minimumScaleFactor = 0.7
         favouriteButton.setImage(UIImage(systemName: "star"), for: .normal)
         favouriteButton.setImage(UIImage(systemName: "star.fill"), for: .selected)
+        favouriteButton.setTitle(nil, for: .normal)
+        favouriteButton.tintColor = ColorSet.incodiOrange
+        favouriteButton.contentHorizontalAlignment = .center
+        favouriteButton.titleLabel?.font = .systemFont(ofSize: 18)
     }
 
     // MARK: - Configure

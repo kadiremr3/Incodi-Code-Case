@@ -11,6 +11,7 @@ final class DetailCoordinator: Coordinator {
     var parentCoordinator: Coordinator?
     var children: [Coordinator] = []
     var navigationController: UINavigationController
+    var user: GitHubUser!
     
     init(
         parentCoordinator: Coordinator? = nil,
@@ -23,6 +24,7 @@ final class DetailCoordinator: Coordinator {
     func start() {
         let viewModel = DetailViewModel(coordinator: self)
         let viewController = DetailViewController(viewModel: viewModel)
+        viewController.user = self.user
         navigationController.pushViewController(viewController, animated: true)
     }
 }

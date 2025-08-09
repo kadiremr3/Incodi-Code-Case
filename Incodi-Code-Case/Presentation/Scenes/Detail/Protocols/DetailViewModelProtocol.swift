@@ -8,4 +8,5 @@
 import Foundation
 
 protocol DetailViewModelProtocol {
+    func fetchDetail(of user: String) throws
 }

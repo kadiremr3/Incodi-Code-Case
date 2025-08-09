@@ -26,11 +26,12 @@ final class HomeCoordinator: Coordinator {
         navigationController.pushViewController(viewController, animated: true)
     }
     
-    func navigateToDetail() {
+    func navigateToDetail(with user: GitHubUser) {
         let detailCoordinator = DetailCoordinator(
             parentCoordinator: self,
             navigationController: navigationController
         )
+        detailCoordinator.user = user
         detailCoordinator.start()
     }
 }
