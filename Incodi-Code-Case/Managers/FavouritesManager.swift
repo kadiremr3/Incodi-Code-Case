@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class FavouritesManager {
+public final class FavouritesManager {
     static let shared = FavouritesManager()
     private init() {}
     

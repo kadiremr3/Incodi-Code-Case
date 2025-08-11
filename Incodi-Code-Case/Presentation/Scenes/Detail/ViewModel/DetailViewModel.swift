@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class DetailViewModel: DetailViewModelProtocol {
+final class DetailViewModel: BaseViewModel, DetailViewModelProtocol {
     var detailCoordinator: DetailCoordinator!
     weak var delegate: DetailViewModelDelegate?
     
@@ -15,6 +15,7 @@ final class DetailViewModel: DetailViewModelProtocol {
         self.detailCoordinator = coordinator
     }
     
+    @MainActor
     func fetchDetail(of user: String) throws {
         guard let url = URL(string: Constants.baseURL + "users/\(user)") else {
             throw URLError(.badURL)

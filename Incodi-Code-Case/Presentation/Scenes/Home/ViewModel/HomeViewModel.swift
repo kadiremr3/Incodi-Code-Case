@@ -7,11 +7,10 @@
 
 import Foundation
 
-final class HomeViewModel: HomeViewModelProtocol {
+final class HomeViewModel: BaseViewModel, HomeViewModelProtocol {
     
     weak var delegate: HomeViewModelDelegate?
     var homeCoordinator: HomeCoordinator!
-    var favouritesManager = FavouritesManager.shared
     
     init(coordinator: HomeCoordinator!) {
         self.homeCoordinator = coordinator
@@ -31,18 +30,6 @@ final class HomeViewModel: HomeViewModelProtocol {
                 delegate?.didFailWithError(error)
             }
         }
-    }
-    
-    func toggleFavourite(for user: GitHubUser) {
-        if favouritesManager.isFavourite(user) {
-            favouritesManager.removeFromFavourites(user)
-        } else {
-            favouritesManager.addToFavourites(user)
-        }
-    }
-    
-    func isFavourite(_ user: GitHubUser) -> Bool {
-        return favouritesManager.isFavourite(user)
     }
     
     func navigateToDetail(with user: GitHubUser) {

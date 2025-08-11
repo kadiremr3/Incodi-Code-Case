@@ -33,6 +33,7 @@ final class SplashViewController: UIViewController {
         view.backgroundColor = ColorSet.incodiOrange
         view.addSubview(splashTitle)
         setupConstraints()
+        viewModel.favouritesManager.loadFavourites()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.viewModel.navigateToHome()
         }

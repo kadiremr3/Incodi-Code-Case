@@ -32,6 +32,12 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Lifecycle Methods
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.favouritesManager.loadFavourites()
+        collectionView.reloadDataOnMainThread()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSceneUI()
@@ -245,11 +251,9 @@ final class HomeViewController: UIViewController {
     
     private func performSearch(query: String) {
         guard !query.isEmpty else { return }
-        
         isLoading = true
         loadingView.isHidden = false
         emptyStateView.isHidden = true
-        
         do {
             try viewModel.fetchGitHubUsers(with: query)
         } catch {
@@ -261,7 +265,6 @@ final class HomeViewController: UIViewController {
     private func handleSearchError() {
         isLoading = false
         loadingView.isHidden = true
-        
         if searchArray.isEmpty {
             emptyStateView.isHidden = false
         }
@@ -272,7 +275,6 @@ final class HomeViewController: UIViewController {
             collectionView.refreshControl?.endRefreshing()
             return
         }
-        
         searchArray.removeAll()
         collectionView.reloadData()
         performSearch(query: searchText)
@@ -349,7 +351,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.delegate = self
         cell.configure(
             with: user,
-            isFavourite: viewModel.isFavourite(user)
+            isFavourite: viewModel.favouritesManager.isFavourite(user)
         )
         
         return cell
@@ -371,8 +373,7 @@ extension HomeViewController: GitHubUserCellDelegate {
         viewModel.toggleFavourite(for: user)
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-                self.collectionView.reloadItems(at: [indexPath])
+                collectionView.reloadItemsOnMainThread(at: [indexPath])
         }
-        
     }
 }

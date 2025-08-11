@@ -7,6 +7,8 @@
 
 import Foundation
 
-protocol DetailViewModelProtocol {
+protocol DetailViewModelProtocol: BaseViewModelProtocol {
+    @MainActor
     func fetchDetail(of user: String) throws
+    func toggleFavourite(for user: GitHubUser)
 }

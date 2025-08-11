@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class SplashViewModel: SplashViewModelProtocol {
+final class SplashViewModel: BaseViewModel, SplashViewModelProtocol {
     
     private var splashCoordinator: SplashCoordinator
     

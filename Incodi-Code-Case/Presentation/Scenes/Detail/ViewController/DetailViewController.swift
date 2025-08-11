@@ -11,10 +11,8 @@ import SDWebImage
 final class DetailViewController: UIViewController {
     
     private var viewModel: DetailViewModelProtocol!
+    private var attributedLinkString: NSMutableAttributedString!
     var user: GitHubUser!
-    
-    // MARK: - Properties
-    private var isFavorite = false
     
     init(viewModel: DetailViewModelProtocol) {
         self.viewModel = viewModel
@@ -45,6 +43,18 @@ final class DetailViewController: UIViewController {
         return label
     }()
     
+    private lazy var linkTextView: UITextView = {
+        let textView = UITextView()
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        textView.dataDetectorTypes = .link
+        textView.backgroundColor = .clear
+        textView.textAlignment = .center
+        textView.font = .systemFont(ofSize: 18, weight: .medium)
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
+    }()
+    
     private lazy var favoriteButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .systemOrange
@@ -66,9 +76,9 @@ final class DetailViewController: UIViewController {
     // MARK: - Setup
     private func setupUI() {
         view.backgroundColor = ColorSet.incodiBlue
-        
         view.addSubview(avatarImageView)
         view.addSubview(usernameLabel)
+        view.addSubview(linkTextView)
         view.addSubview(favoriteButton)
         
         NSLayoutConstraint.activate([
@@ -78,20 +88,25 @@ final class DetailViewController: UIViewController {
             avatarImageView.heightAnchor.constraint(equalToConstant: 240),
             
             usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 20),
-            usernameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            usernameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            usernameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 24),
+            usernameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            usernameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            linkTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            linkTextView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 24),
+            linkTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            linkTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             favoriteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            favoriteButton.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 40),
-            favoriteButton.widthAnchor.constraint(equalToConstant: 180),
-            favoriteButton.heightAnchor.constraint(equalToConstant: 40)
+            favoriteButton.topAnchor.constraint(equalTo: linkTextView.bottomAnchor, constant: 48),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 240),
+            favoriteButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     private func configureData() {
         usernameLabel.text = user.login
-        
+        linkTextView.text = user.html_url
         avatarImageView.sd_setImage(
             with: URL(string: user.avatar_url),
             placeholderImage: UIImage(systemName: "person.circle.fill")
@@ -100,14 +115,14 @@ final class DetailViewController: UIViewController {
     }
     
     private func updateFavoriteButton() {
-        let title = isFavorite ? "Remove from Favorites" : "Add to Favorites"
+        let title = viewModel.favouritesManager.isFavourite(user) ? "Remove from Favorites" : "Add to Favorites"
         favoriteButton.setTitle(title, for: .normal)
-        favoriteButton.backgroundColor = isFavorite ? .systemRed : .systemOrange
+        favoriteButton.backgroundColor = viewModel.favouritesManager.isFavourite(user) ? .systemRed : .systemOrange
     }
     
     // MARK: - Actions
     @objc private func favoriteButtonTapped() {
-        isFavorite.toggle()
+        viewModel.toggleFavourite(for: user)
         updateFavoriteButton()
     }
 }

@@ -7,6 +7,6 @@
 
 import Foundation
 
-public protocol SplashViewModelProtocol {
+protocol SplashViewModelProtocol: BaseViewModelProtocol {
     func navigateToHome()
 }
