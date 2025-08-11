@@ -9,7 +9,9 @@ import Foundation
 
 protocol HomeViewModelProtocol: AnyObject {
     var delegate: HomeViewModelDelegate? { get set }
-    func navigateToDetail(with user: GitHubUser)
     @MainActor
     func fetchGitHubUsers(with query: String) throws
+    func toggleFavourite(for user: GitHubUser)
+    func isFavourite(_ user: GitHubUser) -> Bool
+    func navigateToDetail(with user: GitHubUser)
 }

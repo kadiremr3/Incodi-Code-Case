@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24053.1"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,10 +30,12 @@
                             <constraint firstAttribute="height" constant="40" id="vp6-K8-HLq"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
-                        <state key="normal" title="☆"/>
+                        <state key="normal">
+                            <imageReference key="image" image="star" catalog="system" symbolScale="large"/>
+                        </state>
                         <state key="selected" title="★"/>
                         <connections>
-                            <action selector="favouriteButtonTapped:" destination="-1" eventType="touchUpInside" id="CwH-mM-kvk"/>
+                            <action selector="favouriteButtonTapped:" destination="0Tx-eW-nZ3" eventType="touchUpInside" id="8rS-if-l4Z"/>
                         </connections>
                     </button>
                 </subviews>
@@ -59,4 +62,7 @@
             <point key="canvasLocation" x="137.40458015267174" y="225.7042253521127"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="star" catalog="system" width="128" height="116"/>
+    </resources>
 </document>

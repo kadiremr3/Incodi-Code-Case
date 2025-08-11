@@ -346,12 +346,10 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.GitHubUserCell, for: indexPath) as! GitHubUserCollectionViewCell
         let user = searchArray[indexPath.row]
-        
         cell.delegate = self
         cell.configure(
-            name: user.login,
-            avatarURL: URL(string: user.avatar_url),
-            isFavourite: false // viewModel.isFavorite(user: user)
+            with: user,
+            isFavourite: viewModel.isFavourite(user)
         )
         
         return cell
@@ -359,31 +357,22 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        
-        if let cell = collectionView.cellForItem(at: indexPath) {
-            UIView.animate(
-                withDuration: 0.1,
-                animations: {
-                    cell.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-                },
-                completion: { _ in
-                    UIView.animate(withDuration: 0.1) {
-                        cell.transform = .identity
-                    }
-                }
-            )
-        }
-        
         let user = searchArray[indexPath.row]
         viewModel.navigateToDetail(with: user)
     }
 }
 
 extension HomeViewController: GitHubUserCellDelegate {
-    func gitHubUserCellDidTapFavourite(_ cell: GitHubUserCollectionViewCell) {
+    func gitHubUserCellDidTapFavourite(
+        _ cell: GitHubUserCollectionViewCell,
+        for user: GitHubUser
+    ) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        let user = searchArray[indexPath.row]
+        viewModel.toggleFavourite(for: user)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+                self.collectionView.reloadItems(at: [indexPath])
+        }
         
-//        viewModel.toggleFavorite(user: user)
     }
 }
