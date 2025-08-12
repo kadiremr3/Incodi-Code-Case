@@ -19,12 +19,12 @@ final class MainTabBarController: UITabBarController {
         let homeCoordinator = HomeCoordinator(navigationController: UINavigationController())
         homeCoordinator.start()
         let homeNav = homeCoordinator.navigationController
-        homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
+        homeNav.tabBarItem = UITabBarItem(title: "Home".localized, image: UIImage(systemName: "house"), tag: 0)
         
         let favouritesCoordinator = FavouritesCoordinator(navigationController: UINavigationController())
         favouritesCoordinator.start()
         let favouritesNav = favouritesCoordinator.navigationController
-        favouritesNav.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "star"), tag: 1)
+        favouritesNav.tabBarItem = UITabBarItem(title: "Favourites".localized, image: UIImage(systemName: "star"), tag: 1)
         viewControllers = [homeNav, favouritesNav]
     }
 }

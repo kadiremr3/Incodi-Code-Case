@@ -21,7 +21,7 @@ final class SplashViewController: UIViewController {
     
     private lazy var splashTitle: UILabel = {
         let label = UILabel()
-        label.text = "Incodi Case Study"
+        label.text = "Incodi Code Case"
         label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         label.textColor = ColorSet.incodiBlack
         label.translatesAutoresizingMaskIntoConstraints = false

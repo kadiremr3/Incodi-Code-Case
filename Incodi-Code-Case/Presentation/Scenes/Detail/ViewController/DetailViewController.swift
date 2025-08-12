@@ -99,7 +99,8 @@ final class DetailViewController: UIViewController {
             
             favoriteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             favoriteButton.topAnchor.constraint(equalTo: linkTextView.bottomAnchor, constant: 48),
-            favoriteButton.widthAnchor.constraint(equalToConstant: 240),
+            favoriteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            favoriteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             favoriteButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
@@ -115,7 +116,7 @@ final class DetailViewController: UIViewController {
     }
     
     private func updateFavoriteButton() {
-        let title = viewModel.favouritesManager.isFavourite(user) ? "Remove from Favorites" : "Add to Favorites"
+        let title = viewModel.favouritesManager.isFavourite(user) ? "Remove from Favourites".localized : "Add to Favourites".localized
         favoriteButton.setTitle(title, for: .normal)
         favoriteButton.backgroundColor = viewModel.favouritesManager.isFavourite(user) ? .systemRed : .systemOrange
     }

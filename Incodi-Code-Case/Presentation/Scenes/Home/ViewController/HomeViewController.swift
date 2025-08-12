@@ -126,13 +126,13 @@ final class HomeViewController: UIViewController {
         iconImageView.contentMode = .scaleAspectFit
         
         let titleLabel = UILabel()
-        titleLabel.text = "No Users Found"
+        titleLabel.text = "No Users Found".localized
         titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         titleLabel.textColor = .white
         titleLabel.textAlignment = .center
         
         let messageLabel = UILabel()
-        messageLabel.text = "Try searching for a different username"
+        messageLabel.text = "Try searching for a different username".localized
         messageLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         messageLabel.textColor = .lightGray
         messageLabel.textAlignment = .center
@@ -168,7 +168,7 @@ final class HomeViewController: UIViewController {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         let label = UILabel()
-        label.text = "Searching..."
+        label.text = "Searching...".localized
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textColor = .secondaryLabel
         label.textAlignment = .center
@@ -257,7 +257,6 @@ final class HomeViewController: UIViewController {
         do {
             try viewModel.fetchGitHubUsers(with: query)
         } catch {
-            print("Fetch error: \(error)")
             handleSearchError()
         }
     }
@@ -311,8 +310,12 @@ extension HomeViewController: HomeViewModelDelegate {
     }
     
     private func showErrorToast() {
-        let alertController = UIAlertController(title: "Search Error", message: "Failed to fetch users. Please try again.", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
+        let alertController = UIAlertController(
+            title: "Search Error".localized,
+            message: "Failed to fetch users. Please try again.".localized,
+            preferredStyle: .alert
+        )
+        let okAction = UIAlertAction(title: "Ok".localized, style: .default)
         alertController.addAction(okAction)
         present(alertController, animated: true)
     }

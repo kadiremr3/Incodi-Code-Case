@@ -94,13 +94,13 @@ extension FavouritesViewController: UICollectionViewDataSource, UICollectionView
 extension FavouritesViewController: GitHubUserCellDelegate {
     func gitHubUserCellDidTapFavourite(_ cell: GitHubUserCollectionViewCell, for user: GitHubUser) {
         let alert = UIAlertController(
-            title: "Favoriden Kaldır",
-            message: "\(user.login) favorilerden kaldırılsın mı?",
+            title: "Remove from Favourites".localized.capitalized,
+            message: "Remove [PARAM] from favourites?".localized.replacingOccurrences(of: "[PARAM]", with: user.login),
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "İptal", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Evet", style: .destructive, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok".localized, style: .destructive, handler: { [weak self] _ in
             guard let self else { return }
             self.favouritesManager.removeFromFavourites(user)
             self.loadFavourites()
