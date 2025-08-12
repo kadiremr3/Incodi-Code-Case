@@ -21,8 +21,7 @@ final class FavouritesCoordinator: Coordinator {
     }
     
     func start() {
-        let viewModel = FavouritesViewModel(coordinator: self)
-        let viewController = FavouritesViewController(viewModel: viewModel)
+        let viewController = FavouritesViewController()
         navigationController.pushViewController(viewController, animated: true)
     }
 }

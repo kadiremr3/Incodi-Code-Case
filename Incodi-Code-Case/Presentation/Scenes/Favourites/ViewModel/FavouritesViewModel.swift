@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class FavouritesViewModel: FavouritesViewModelProtocol {
+final class FavouritesViewModel: BaseViewModel, FavouritesViewModelProtocol {
     
     var favouritesCoordinator: FavouritesCoordinator!
     
