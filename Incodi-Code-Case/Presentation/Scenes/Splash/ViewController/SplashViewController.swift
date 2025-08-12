@@ -8,16 +8,26 @@
 import UIKit
 
 final class SplashViewController: UIViewController {
-    private var viewModel: SplashViewModelProtocol!
     
-    init(viewModel: SplashViewModelProtocol) {
+    // MARK: - Variables
+    
+    var onFinish: (() -> Void)?
+    weak var coordinator: SplashCoordinator?
+    private var favouritesManager: FavouritesManagerProtocol!
+    
+    init(coordinator: SplashCoordinator,
+         favouritesManager: FavouritesManagerProtocol
+    ) {
         super.init(nibName: nil, bundle: nil)
-        self.viewModel = viewModel
+        self.coordinator = coordinator
+        self.favouritesManager = favouritesManager
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - UI
     
     private lazy var splashTitle: UILabel = {
         let label = UILabel()
@@ -33,9 +43,9 @@ final class SplashViewController: UIViewController {
         view.backgroundColor = ColorSet.incodiOrange
         view.addSubview(splashTitle)
         setupConstraints()
-        viewModel.favouritesManager.loadFavourites()
+        favouritesManager.loadFavourites()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.viewModel.navigateToHome()
+            self.onFinish?()
         }
     }
     

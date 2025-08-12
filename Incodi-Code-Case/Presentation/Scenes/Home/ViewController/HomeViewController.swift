@@ -40,14 +40,15 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSceneUI()
+        view.backgroundColor = ColorSet.incodiBlue
+        navigationItem.setHidesBackButton(true, animated: true)
         viewModel.delegate = self
         addViews()
         setupConstraints()
         setupSearchWithDebounce()
     }
     
-    // MARK: - Views
+    // MARK: - UI
     
     private lazy var headerView: UIView = {
         let view = UIView()
@@ -186,13 +187,6 @@ final class HomeViewController: UIViewController {
         
         return view
     }()
-    
-    // MARK: - UI Setup
-    
-    private func setupSceneUI() {
-        view.backgroundColor = ColorSet.incodiBlue
-        navigationItem.setHidesBackButton(true, animated: true)
-    }
     
     private func addViews() {
         view.addSubview(headerView)

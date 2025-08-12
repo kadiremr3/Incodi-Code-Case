@@ -20,7 +20,7 @@ final class GitHubUserCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var favouriteButton: UIButton!
     
-    // MARK: - Properties
+    // MARK: - Variables
     
     weak var delegate: GitHubUserCellDelegate?
     private var isFavourite: Bool = false
@@ -36,7 +36,7 @@ final class GitHubUserCollectionViewCell: UICollectionViewCell {
         setupUserNameLabel()
     }
 
-    // MARK: - Configure
+    // MARK: - UI
     
     func configure(
         with user: GitHubUser,
@@ -80,6 +80,8 @@ final class GitHubUserCollectionViewCell: UICollectionViewCell {
             favouriteButton.setImage(UIImage(systemName: "star"), for: .normal)
         }
     }
+    
+    // MARK: Actions
 
     @IBAction func favouriteButtonTapped(_ sender: Any) {
         guard let user = user else { return }

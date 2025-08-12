@@ -8,15 +8,11 @@
 import UIKit
 
 final class FavouritesCoordinator: Coordinator {
-    var parentCoordinator: Coordinator?
-    var children: [Coordinator] = []
     var navigationController: UINavigationController
     
     init(
-        parentCoordinator: Coordinator? = nil,
         navigationController: UINavigationController
     ) {
-        self.parentCoordinator = parentCoordinator
         self.navigationController = navigationController
     }
     

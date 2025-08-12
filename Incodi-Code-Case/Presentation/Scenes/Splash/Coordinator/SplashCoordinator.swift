@@ -8,32 +8,21 @@
 import UIKit
 
 final class SplashCoordinator: Coordinator {
-    var parentCoordinator: Coordinator?
-    var children: [Coordinator] = []
     var navigationController: UINavigationController
-    
-    init(
-        parentCoordinator: Coordinator? = nil,
-        navigationController: UINavigationController
-    ) {
-        self.parentCoordinator = parentCoordinator
+    var onFinish: (() -> Void)?
+
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-    
+
     func start() {
-        let viewModel = SplashViewModel(coordinator: self)
-        let viewController = SplashViewController(viewModel: viewModel)
-        navigationController.pushViewController(viewController, animated: true)
-        navigationController.navigationBar.isHidden = true
-    }
-    
-    func navigateToHome() {
-        let homeCoordinator = HomeCoordinator(
-            parentCoordinator: self,
-            navigationController: navigationController
+        let splashViewController = SplashViewController(
+            coordinator: self,
+            favouritesManager: FavouritesManager.shared
         )
-        navigationController.navigationBar.isHidden = false
-        homeCoordinator.start()
+        splashViewController.onFinish = { [weak self] in
+            self?.onFinish?()
+        }
+        navigationController.setViewControllers([splashViewController], animated: false)
     }
-    
 }

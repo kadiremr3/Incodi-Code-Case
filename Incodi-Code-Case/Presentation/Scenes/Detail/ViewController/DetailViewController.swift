@@ -10,6 +10,8 @@ import SDWebImage
 
 final class DetailViewController: UIViewController {
     
+    // MARK: - Variables
+    
     private var viewModel: DetailViewModelProtocol!
     private var attributedLinkString: NSMutableAttributedString!
     var user: GitHubUser!
@@ -23,7 +25,16 @@ final class DetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - UI Elements
+    // MARK: - Lifecycle Methods
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+        configureData()
+    }
+    
+    // MARK: - UI
+    
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -66,14 +77,6 @@ final class DetailViewController: UIViewController {
         return button
     }()
     
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupUI()
-        configureData()
-    }
-    
-    // MARK: - Setup
     private func setupUI() {
         view.backgroundColor = ColorSet.incodiBlue
         view.addSubview(avatarImageView)
@@ -105,6 +108,7 @@ final class DetailViewController: UIViewController {
         ])
     }
     
+    // MARK: - Other Methods
     private func configureData() {
         usernameLabel.text = user.login
         linkTextView.text = user.html_url

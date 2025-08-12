@@ -12,7 +12,6 @@ final class FavouritesViewController: UIViewController {
     private var favourites: [GitHubUser] = []
     private let favouritesManager = FavouritesManager.shared
 
-    // MARK: - Init
     init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -40,7 +39,7 @@ final class FavouritesViewController: UIViewController {
         return collectionView
     }()
 
-    // MARK: - Lifecycle
+    // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = ColorSet.incodiBlack
@@ -53,7 +52,7 @@ final class FavouritesViewController: UIViewController {
         loadFavourites()
     }
 
-    // MARK: - Setup
+    // MARK: - UI
     private func setupCollectionView() {
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
@@ -64,14 +63,15 @@ final class FavouritesViewController: UIViewController {
         ])
     }
 
-    // MARK: - Data
+    // MARK: - Other Methods
     private func loadFavourites() {
         favourites = favouritesManager.favourites
         collectionView.reloadData()
     }
 }
 
-// MARK: - UICollectionViewDataSource & Delegate
+// MARK: - Extensions
+
 extension FavouritesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return favourites.count
@@ -90,7 +90,6 @@ extension FavouritesViewController: UICollectionViewDataSource, UICollectionView
     }
 }
 
-// MARK: - GitHubUserCellDelegate
 extension FavouritesViewController: GitHubUserCellDelegate {
     func gitHubUserCellDidTapFavourite(_ cell: GitHubUserCollectionViewCell, for user: GitHubUser) {
         let alert = UIAlertController(

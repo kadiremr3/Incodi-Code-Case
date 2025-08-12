@@ -8,7 +8,14 @@
 import Foundation
 import Combine
 
-public final class FavouritesManager {
+protocol FavouritesManagerProtocol {
+    var favourites: [GitHubUser] { get }
+    func loadFavourites()
+    func addToFavourites(_ user: GitHubUser)
+    func removeFromFavourites(_ user: GitHubUser)
+}
+
+public final class FavouritesManager: FavouritesManagerProtocol {
     static let shared = FavouritesManager()
     private init() {}
     
