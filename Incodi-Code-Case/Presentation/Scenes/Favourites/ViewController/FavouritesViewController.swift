@@ -42,7 +42,8 @@ final class FavouritesViewController: UIViewController {
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = ColorSet.incodiBlack
+        view.backgroundColor = ColorSet.incodiBlue
+        setupNavigationBar()
         setupCollectionView()
         loadFavourites()
     }
@@ -53,6 +54,17 @@ final class FavouritesViewController: UIViewController {
     }
 
     // MARK: - UI
+    
+    private func setupNavigationBar() {
+        title = "Favourites".localized
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [
+            .foregroundColor: UIColor(named: "ColorSet.incodiOrange") ?? UIColor.orange
+        ]
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+    
     private func setupCollectionView() {
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
